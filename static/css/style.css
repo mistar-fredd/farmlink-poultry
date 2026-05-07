@@ -1,0 +1,57 @@
+/* ============================================================
+   FARMLINK POULTRY - Custom Styles
+   ============================================================ */
+
+body {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+/* Navbar */
+.navbar-brand {
+    font-size: 1.4rem;
+    letter-spacing: 0.5px;
+}
+
+/* Cards */
+.card {
+    border-radius: 0.75rem;
+    transition: transform 0.15s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+}
+
+.card .display-4 {
+    font-size: 3rem;
+}
+
+/* Tables */
+.table th {
+    white-space: nowrap;
+}
+
+/* Forms */
+.form-control:focus,
+.form-select:focus {
+    border-color: #198754;
+    box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
+}
+
+/* Badges */
+.badge {
+    font-size: 0.85rem;
+    padding: 0.4em 0.7em;
+}
+
+/* Footer */
+footer {
+    margin-top: auto;
+}
