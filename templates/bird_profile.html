@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block title %}Bird {{ bird.leg_band_number }} - FARMLINK POULTRY{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h2><i class="bi bi-egg me-2"></i>Bird Profile: {{ bird.leg_band_number }}</h2>
+        <hr>
+    </div>
+</div>
+
+<!-- Bird Details -->
+<div class="row g-4 mb-4">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="bi bi-info-circle me-2"></i>Bird Details</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-borderless mb-0">
+                    <tr>
+                        <th>Leg Band Number:</th>
+                        <td>{{ bird.leg_band_number }}</td>
+                    </tr>
+                    <tr>
+                        <th>Breed:</th>
+                        <td>{{ bird.breed }}</td>
+                    </tr>
+                    <tr>
+                        <th>Category:</th>
+                        <td>{{ bird.category }}</td>
+                    </tr>
+                    <tr>
+                        <th>Flock:</th>
+                        <td>{{ bird.batch_name }}</td>
+                    </tr>
+                    <tr>
+                        <th>Hatch Date:</th>
+                        <td>{{ bird.hatch_date }}</td>
+                    </tr>
+                    <tr>
+                        <th>Status:</th>
+                        <td>
+                            {% if bird.status == 'alive' %}
+                                <span class="badge bg-success">Alive</span>
+                            {% elif bird.status == 'dead' %}
+                                <span class="badge bg-danger">Dead</span>
+                            {% else %}
+                                <span class="badge bg-warning text-dark">Sold</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Health Issues:</th>
+                        <td>{{ health_issue_count }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <!-- Actions Card -->
+        <div class="card shadow-sm mb-3">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="bi bi-gear me-2"></i>Actions</h5>
+            </div>
+            <div class="card-body">
+                <!-- AI Prediction Button -->
+                <a href="{{ url_for('predict_health', leg_band_number=bird.leg_band_number) }}"
+                   class="btn btn-info btn-lg w-100 mb-3">
+                    <i class="bi bi-cpu me-2"></i>Run AI Health Prediction
+                </a>
+
+                <!-- Add Health Record -->
+                <a href="{{ url_for('add_health_record', leg_band_number=bird.leg_band_number) }}"
+                   class="btn btn-outline-primary w-100 mb-3">
+                    <i class="bi bi-plus-circle me-2"></i>Add Health Record
+                </a>
+
+                <!-- Update Status -->
+                <form method="POST" action="{{ url_for('update_bird_status', leg_band_number=bird.leg_band_number) }}">
+                    <div class="input-group">
+                        <select name="status" class="form-select">
+                            <option value="alive" {% if bird.status == 'alive' %}selected{% endif %}>Alive</option>
+                            <option value="dead" {% if bird.status == 'dead' %}selected{% endif %}>Dead</option>
+                            <option value="sold" {% if bird.status == 'sold' %}selected{% endif %}>Sold</option>
+                        </select>
+                        <button type="submit" class="btn btn-outline-secondary">Update Status</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Health Records Table -->
+<div class="row">
+    <div class="col-12">
+        <h4><i class="bi bi-heart-pulse me-2"></i>Health History</h4>
+        {% if health_records %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Date</th>
+                        <th>Disease</th>
+                        <th>Treatment</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in health_records %}
+                    <tr>
+                        <td>{{ record.record_date }}</td>
+                        <td>{{ record.disease or '—' }}</td>
+                        <td>{{ record.treatment or '—' }}</td>
+                        <td>{{ record.notes or '—' }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="alert alert-secondary">
+            No health records found for this bird.
+            <a href="{{ url_for('add_health_record', leg_band_number=bird.leg_band_number) }}">Add one now</a>.
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<a href="{{ url_for('bird_list') }}" class="btn btn-secondary mt-3">
+    <i class="bi bi-arrow-left me-1"></i>Back to Bird List
+</a>
+{% endblock %}

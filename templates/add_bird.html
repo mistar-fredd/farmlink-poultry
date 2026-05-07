@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Register Bird - FARMLINK POULTRY{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <h2><i class="bi bi-plus-square me-2"></i>Register New Bird</h2>
+        <hr>
+
+        <form method="POST" action="{{ url_for('add_bird') }}">
+            <div class="mb-3">
+                <label for="leg_band_number" class="form-label fw-bold">Leg Band Number</label>
+                <input type="text" class="form-control" id="leg_band_number" name="leg_band_number"
+                       placeholder="e.g., LB-001" required>
+                <div class="form-text">Unique identifier for this bird.</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="flock_id" class="form-label fw-bold">Assign to Flock</label>
+                <select class="form-select" id="flock_id" name="flock_id" required>
+                    <option value="" selected disabled>-- Select a Flock --</option>
+                    {% for flock in flocks %}
+                    <option value="{{ flock.id }}">{{ flock.batch_name }}</option>
+                    {% endfor %}
+                </select>
+                {% if not flocks %}
+                <div class="form-text text-danger">
+                    No flocks available. <a href="{{ url_for('add_flock') }}">Create one first</a>.
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label for="breed" class="form-label fw-bold">Breed</label>
+                <input type="text" class="form-control" id="breed" name="breed"
+                       placeholder="e.g., Rhode Island Red" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="category" class="form-label fw-bold">Category</label>
+                <select class="form-select" id="category" name="category" required>
+                    <option value="Layer">Layer</option>
+                    <option value="Broiler">Broiler</option>
+                    <option value="Breeder">Breeder</option>
+                    <option value="Free Range">Free Range</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="hatch_date" class="form-label fw-bold">Hatch Date</label>
+                <input type="date" class="form-control" id="hatch_date" name="hatch_date" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-check-circle me-1"></i>Register Bird
+            </button>
+            <a href="{{ url_for('index') }}" class="btn btn-secondary ms-2">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}
